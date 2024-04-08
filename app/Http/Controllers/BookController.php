@@ -29,15 +29,21 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    public function getCsrf(){
+        return csrf_token();
+    }
+
     public function store(StoreBookRequest $request)
     {
-        Book::create([
+       $book = Book::create([
             "title" => $request->title,
             "public_date" => $request->public_date,
-            "pages" => $request->pages    
+            "pages" => $request->pages,    
+            'id' => $request->id
         ]);
 
-        return response()->json(["book" => $request]);
+    
+        return response()->json([$book]);
     }
 
     /**
@@ -70,5 +76,10 @@ class BookController extends Controller
     public function destroy(Book $book)
     {
         //
+        $book->delete();
+        
+        return response()->json(['message' => 'Books deleted successfully']);
     }
+
+    
 }
